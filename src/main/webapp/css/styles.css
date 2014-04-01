@@ -1,0 +1,102 @@
+body{
+	background: #000000;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	background-image: url('http://elan.bustos.org/background.png');
+}
+p, li, label{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 14;
+}
+h1{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 60px;
+}
+h2{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 52px;
+}
+h3{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 44px;
+}
+h4{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 36px;
+}
+h5{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 30px;
+}
+h6{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 18px;
+}
+legend{
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 14;
+}
+ul{
+	color: #000000;
+	background: none;
+	list-style: square;
+}
+a{
+	text-decoration: none;
+	color: #FFDD00;
+	background: none;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 14;
+}
+fieldset{
+	color: #FFDD00;
+	background: none;
+	border: 2px solid #FFDD00;
+}
+a a: hover{
+	text-decoration: underline;
+	color: #FFDD00;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	font-size: 14;
+	background: #0000FF;
+}
+ol{
+	color: #000000;
+	background: none;
+}
+img{
+	padding: 2px;
+	margin: 5px;
+	background: #000000;
+}
+input, button{
+	border: 1px solid #FFDD00;
+	background: #000000;
+	color: #FFDD00;
+	font-size: 14;
+}
+canvas{
+	border: 3px solid #FFDD00;
+}
+textarea{
+	border 1px solid #FFDD00;
+	background: #000000;
+	font-family: Courier, Courier New, Helvetica, Arial;
+	color: #FFDD00;
+	size: 10px;
+}

@@ -7,6 +7,9 @@ import org.fusesource.scalate.layout.DefaultLayoutStrategy
 import javax.servlet.http.HttpServletRequest
 import collection.mutable
 
+/** Trait that provides servlet environment
+ * 
+ */
 trait DiscemoneServerStack extends ScalatraServlet with ScalateSupport {
 
   /* wire up the precompiled templates */

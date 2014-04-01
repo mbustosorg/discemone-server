@@ -11,6 +11,9 @@ import scala.concurrent.{ExecutionContext, Future, Promise, Await}
 
 /** Servlet main class for serving Discemone data
  * 
+ *  @constructor create a new servlet
+ *  @param system the discemone actor system
+ *  @param discemoneActor the controller actor
  */
 class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) extends DiscemoneServerStack with FutureSupport {
   protected implicit def executor: ExecutionContext = system.dispatcher
@@ -40,7 +43,6 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     </html>
   }
   
-  // -- New for discemone support
   get("/hello-actor") {    
         val countQuery = discemoneActor ? "Count"
     	val result = Await.result (countQuery, 1 second)
@@ -52,6 +54,5 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     			</body>
     	</html>
   }
-  // --
   
 }

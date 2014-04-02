@@ -17,7 +17,7 @@ object JettyLauncher {
     val context = new WebAppContext()
     context setContextPath "/"
     //val resourceBase = getClass.getClassLoader.getResource("webapp").toExternalForm
-    val resourceBase = "webapp"
+    val resourceBase = "resource_managed/webapp"
     context.setResourceBase(resourceBase)
     context.addEventListener(new ScalatraListener)
     context.addServlet(classOf[DefaultServlet], "/")

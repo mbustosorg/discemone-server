@@ -1,5 +1,3 @@
-package org.bustos.discemoneServer
-
 import org.bustos.discemoneServer._
 import org.scalatra._
 import javax.servlet.ServletContext

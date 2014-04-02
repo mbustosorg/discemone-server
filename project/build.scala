@@ -5,7 +5,7 @@ import org.scalatra.sbt.PluginKeys._
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
 import sbtassembly.Plugin._
-import AssemblyKeys._
+import sbtassembly.Plugin.AssemblyKeys._
 
 object DiscemoneServerBuild extends Build {
   val Organization = "org.bustos"
@@ -63,10 +63,10 @@ object DiscemoneServerBuild extends Build {
     	      (managedBase, base) =>
       	      val webappBase = base / "src" / "main" / "webapp"
       	      for {
-              	  (from, to) <- webappBase ** "*" x rebase(webappBase, managedBase / "webapp")
+              	  (from, to) <- webappBase ** "*" x rebase(webappBase, managedBase / "main" / "webapp")
       	      } yield {
                   Sync.copy(from, to)
-        	  to
+          	  to
       	      }
   	  }
     ) settings (net.virtualvoid.sbt.graph.Plugin.graphSettings: _*) dependsOn (discemone)

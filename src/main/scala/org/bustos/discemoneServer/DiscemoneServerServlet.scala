@@ -25,7 +25,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   get("/") {
     <html>
 	  <head>
-	    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+	    <link rel="stylesheet" type="text/css" href="css/styles.css" />
 	  </head>
       <body>
         <h1>Hello, world!</h1>
@@ -53,6 +53,11 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     			{result}
     			</body>
     	</html>
+  }
+  
+  get("/sparkline") {
+	  contentType = "text/html"
+	  layoutTemplate("sparkline.scaml")
   }
   
 }

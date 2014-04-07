@@ -1,12 +1,18 @@
 package org.bustos.discemoneServer
 
 import org.scalatra._
+import org.scalatra.json._
+import org.scalatra.{Accepted, AsyncResult, FutureSupport, ScalatraServlet}
+
 import scalate.ScalateSupport
 
-import _root_.org.bustos.discemone._
+import org.json4s.{DefaultFormats, Formats}
+
 import _root_.akka.actor.{ActorRef, Actor, ActorSystem}
 import _root_.akka.util.Timeout
-import org.scalatra.{Accepted, AsyncResult, FutureSupport, ScalatraServlet}
+import _root_.akka.pattern.ask
+import _root_.akka.actor.Status.{ Success, Failure }
+
 import scala.concurrent.{ExecutionContext, Future, Promise, Await}
 
 /** Servlet main class for serving Discemone data
@@ -15,14 +21,25 @@ import scala.concurrent.{ExecutionContext, Future, Promise, Await}
  *  @param system the discemone actor system
  *  @param discemoneActor the controller actor
  */
-class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) extends DiscemoneServerStack with FutureSupport {
+class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) extends DiscemoneServerStack 
+																					with FutureSupport 
+																					with NativeJsonSupport 
+																					with CorsSupport {
   protected implicit def executor: ExecutionContext = system.dispatcher
-  import _root_.akka.pattern.ask
-  import _root_.akka.actor.Status.{ Success, Failure }
+  protected implicit val jsonFormats: Formats = DefaultFormats
+
   import scala.concurrent.duration._
+  
+  import org.bustos.discemone.Discemone._
+  
   implicit val defaultTimeout = Timeout(100)
   
+  options("/*"){
+    response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
+  }
+  
   get("/") {
+	  contentType = "text/html"
     <html>
 	  <head>
 	    <link rel="stylesheet" type="text/css" href="css/styles.css" />
@@ -35,6 +52,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   get("/hello-scalate") {
+	  contentType = "text/html"
     <html>
       <body>
         <h1>Hello, dudes!</h1>
@@ -43,7 +61,8 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     </html>
   }
   
-  get("/hello-actor") {    
+  get("/actor_hello") {    
+	  	contentType = "text/html"
         val countQuery = discemoneActor ? "Count"
     	val result = Await.result (countQuery, 1 second)
     	// Add async logic here
@@ -53,6 +72,12 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     			{result}
     			</body>
     	</html>
+  }
+  
+  get("/cpuTimeSeries") {    
+	  	contentType = formats("json")
+        val cpuQuery = discemoneActor ? CollectCPUtimeSeries
+        Await.result (cpuQuery, 1 second)
   }
   
   get("/sparkline") {

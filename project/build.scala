@@ -25,15 +25,18 @@ object DiscemoneServerBuild extends Build {
       version := Version,
       scalaVersion := ScalaVersion,
       resolvers += Classpaths.typesafeReleases,
+      resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
       libraryDependencies ++= Seq( 
 	"org.slf4j" % "slf4j-api" % "1.7.6",
     	"org.slf4j" % "slf4j-simple" % "1.7.6",
 	"org.scalatra" %% "scalatra" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
         "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
-        //"ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
+	"org.scalatra" %% "scalatra-json" % "2.2.2", 
+  	"org.json4s"   %% "json4s-native" % "3.2.6",
+	//"ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
 	"com.typesafe.akka" %% "akka-actor" % "2.2.3",
-        "org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container;compile",
+	"org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container;compile",
         "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;compile;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
       ),
       scalateTemplateConfig in Compile <<= (sourceDirectory in Compile){ base =>

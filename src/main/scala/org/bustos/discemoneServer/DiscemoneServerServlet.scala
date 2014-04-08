@@ -80,9 +80,25 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
         Await.result (cpuQuery, 1 second)
   }
   
+  get("/memoryTimeSeries") {
+	  	contentType = formats("json")
+        val cpuQuery = discemoneActor ? CollectCPUtimeSeries
+        Await.result (cpuQuery, 1 second)    
+  }
+  
+  get("/sensorStatus") {
+	  	contentType = formats("json")
+        val cpuQuery = discemoneActor ? CollectCPUtimeSeries
+        Await.result (cpuQuery, 1 second)        
+  }
+  
   get("/sparkline") {
 	  contentType = "text/html"
 	  layoutTemplate("sparkline.scaml")
+  }
+  
+  put("/sensor1/threshold?value=:value") {
+    
   }
   
 }

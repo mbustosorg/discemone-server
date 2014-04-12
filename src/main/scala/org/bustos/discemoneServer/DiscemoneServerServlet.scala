@@ -76,20 +76,20 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   get("/cpuTimeSeries") {    
 	  	contentType = formats("json")
-        val cpuQuery = discemoneActor ? CollectCPUtimeSeries
-        Await.result (cpuQuery, 1 second)
+        val query = discemoneActor ? CollectCPUtimeSeries
+        Await.result (query, 1 second)
   }
   
   get("/memoryTimeSeries") {
 	  	contentType = formats("json")
-        val cpuQuery = discemoneActor ? CollectCPUtimeSeries
-        Await.result (cpuQuery, 1 second)    
+        val query = discemoneActor ? CollectMemoryTimeSeries
+        Await.result (query, 1 second)    
   }
   
   get("/sensorStatus") {
 	  	contentType = formats("json")
-        val cpuQuery = discemoneActor ? CollectCPUtimeSeries
-        Await.result (cpuQuery, 1 second)        
+	    val query = discemoneActor ? CollectCPUtimeSeries
+	    Await.result (query, 1 second)        
   }
   
   get("/sparkline") {
@@ -98,7 +98,8 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   put("/sensor1/threshold?value=:value") {
-    
+	  val newValue: String = params("value") 
+	  discemoneActor ! ThresholdValue(newValue.toInt)
   }
   
 }

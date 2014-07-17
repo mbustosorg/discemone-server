@@ -14,7 +14,8 @@ object DiscemoneServerBuild extends Build {
   val ScalaVersion = "2.10.3"
   val ScalatraVersion = "2.2.2"
 
-  lazy val discemone = RootProject(file("../../scala/discemone"))
+  //lazy val discemone = RootProject(file("../../scala/discemone"))
+  lazy val rxtx_akka_io = RootProject(uri("git://github.com/msiegenthaler/rxtx-akka-io.git"))
 
   lazy val discemoneServerRoot = Project (
     "discemoneServer",
@@ -58,6 +59,7 @@ object DiscemoneServerBuild extends Build {
             	  case x if x startsWith ".classpath" => MergeStrategy.concat 
             	  case x if x startsWith ".project" => MergeStrategy.concat 
             	  case x if x startsWith "log4j.properties" => MergeStrategy.concat 
+            	  case x if x startsWith "library.properties" => MergeStrategy.concat 
             	  case x => old(x) 
       	  	} 
 	  },
@@ -72,6 +74,7 @@ object DiscemoneServerBuild extends Build {
           	  to
       	      }
   	  }
-    ) settings (net.virtualvoid.sbt.graph.Plugin.graphSettings: _*) dependsOn (discemone)
+    ) settings (net.virtualvoid.sbt.graph.Plugin.graphSettings: _*) dependsOn (rxtx_akka_io)
+    //dependsOn (discemone)
 
 }

@@ -20,12 +20,13 @@ object DiscemoneServerBuild extends Build {
   lazy val discemoneServerRoot = Project (
     "discemoneServer",
     file("."),
-    settings = Defaults.defaultSettings ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
+    settings = seq(com.typesafe.sbt.SbtStartScript.startScriptForClassesSettings: _*) ++ Defaults.defaultSettings ++ ScalatraPlugin.scalatraWithJRebel ++ scalateSettings ++ Seq(
       organization := Organization,
       name := Name,
       version := Version,
       scalaVersion := ScalaVersion,
       resolvers += Classpaths.typesafeReleases,
+      resolvers += Classpaths.typesafeResolver,
       resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
       libraryDependencies ++= Seq( 
 	"org.slf4j" % "slf4j-api" % "1.7.6",

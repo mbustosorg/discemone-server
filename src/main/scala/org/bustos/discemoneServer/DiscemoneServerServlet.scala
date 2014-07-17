@@ -74,13 +74,25 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     	</html>
   }
   
-  get("/cpuTimeSeries") {    
+  get("/memberCount") {
+	  	contentType = formats("json")
+        val query = discemoneActor ? MemberCount
+        Await.result (query, 1 second)    
+  }
+  
+  get("/metrics/cpu") {    
 	  	contentType = formats("json")
         val query = discemoneActor ? CollectCPUtimeSeries
         Await.result (query, 1 second)
   }
   
-  get("/memoryTimeSeries") {
+  get("/metrics/battery") {
+	  	contentType = formats("json")
+        val query = discemoneActor ? CollectBatteryTimeSeries
+        Await.result (query, 1 second)    
+  }
+  
+  get("/metrics/memory") {
 	  	contentType = formats("json")
         val query = discemoneActor ? CollectMemoryTimeSeries
         Await.result (query, 1 second)    
@@ -97,7 +109,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
 	  layoutTemplate("sparkline.scaml")
   }
   
-  put("/sensor1/threshold?value=:value") {
+  put("/sensor1/params?value=:value") {
 	  val newValue: String = params("value") 
 	  discemoneActor ! ThresholdValue(newValue.toInt)
   }

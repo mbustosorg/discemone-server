@@ -38,6 +38,7 @@ object DiscemoneServerBuild extends Build {
   	"org.json4s"   %% "json4s-native" % "3.2.6",
 	//"ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
 	"ch.inventsoft.akka" %% "rxtx-akka-io" % "1.0.2",
+        "org.rxtx" % "rxtx" % "2.1.7",
 	"com.typesafe.akka" %% "akka-actor" % "2.2.3",
 	"org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container;compile",
         "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;compile;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))

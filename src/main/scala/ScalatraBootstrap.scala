@@ -17,7 +17,7 @@ class ScalatraBootstrap extends LifeCycle {
   
   override def init(context: ServletContext) {
     logger.info("Starting ScalatraBootstrap with actor setup")
-    context.mount(new DiscemoneServerServlet(system, a), "/*")
+    //context.mount(new DiscemoneServerServlet(system, a), "/*")
   }
 
   override def destroy(context:ServletContext) {

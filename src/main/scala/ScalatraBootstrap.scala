@@ -12,12 +12,13 @@ import org.slf4j.LoggerFactory
 class ScalatraBootstrap extends LifeCycle {
 
   val system = ActorSystem("discemone")
-  val a = system.actorOf(Props[Discemone], "Discemone")    
+  //val a = system.actorOf(Props[Discemone], "Discemone")    
+  val a = system.actorOf(Props[DiscemoneMock], "Discemone")    
   val logger = LoggerFactory.getLogger(getClass)
   
   override def init(context: ServletContext) {
-    logger.info("Starting ScalatraBootstrap with actor setup")
-    //context.mount(new DiscemoneServerServlet(system, a), "/*")
+    logger.info("Starting Discemone ScalatraBootstrap with actor setup")
+    context.mount(new DiscemoneServerServlet(system, a), "/*")
   }
 
   override def destroy(context:ServletContext) {

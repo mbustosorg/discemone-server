@@ -30,7 +30,8 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
 
   import scala.concurrent.duration._
   
-  import org.bustos.discemone.Discemone._
+  //import org.bustos.discemone.Discemone._
+  import org.bustos.discemoneServer.DiscemoneMock._
   
   implicit val defaultTimeout = Timeout(100)
   

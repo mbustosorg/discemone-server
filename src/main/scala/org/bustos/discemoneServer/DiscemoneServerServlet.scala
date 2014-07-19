@@ -7,6 +7,7 @@ import org.scalatra.{Accepted, AsyncResult, FutureSupport, ScalatraServlet}
 import scalate.ScalateSupport
 
 import org.json4s.{DefaultFormats, Formats}
+import org.slf4j.{Logger, LoggerFactory}
 
 import _root_.akka.actor.{ActorRef, Actor, ActorSystem}
 import _root_.akka.util.Timeout
@@ -30,13 +31,20 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
 
   import scala.concurrent.duration._
   
+  val logger = LoggerFactory.getLogger(getClass)
+  
   //import org.bustos.discemone.Discemone._
   import org.bustos.discemoneServer.DiscemoneMock._
   
   implicit val defaultTimeout = Timeout(100)
   
   options("/*"){
-    response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"));
+    //response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"))
+	response.setHeader("Allow", "PUT, POST, GET")
+  }
+  
+  options("/shutdown") {
+    response.setHeader("Allow", "PUT")
   }
   
   get("/") {
@@ -75,44 +83,80 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     	</html>
   }
   
-  get("/memberCount") {
-	  	contentType = formats("json")
-        val query = discemoneActor ? MemberCount
-        Await.result (query, 1 second)    
-  }
-  
   get("/metrics/cpu") {    
 	  	contentType = formats("json")
-        val query = discemoneActor ? CollectCPUtimeSeries
+        val query = discemoneActor ? "CPU_TIME_SERIES_REQUEST"
         Await.result (query, 1 second)
   }
   
   get("/metrics/battery") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? CollectBatteryTimeSeries
+        val query = discemoneActor ? "BAT_TIME_SERIES_REQUEST"
         Await.result (query, 1 second)    
   }
   
   get("/metrics/memory") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? CollectMemoryTimeSeries
+        val query = discemoneActor ? "MEM_TIME_SERIES_REQUEST"
         Await.result (query, 1 second)    
   }
   
-  get("/sensorStatus") {
+  get("/metrics/sensors/:id/activityLevel") {
 	  	contentType = formats("json")
-	    val query = discemoneActor ? CollectCPUtimeSeries
-	    Await.result (query, 1 second)        
+        val query = discemoneActor ? SensorActivityLevel(params("id"))
+        Await.result (query, 1 second)    
   }
   
-  get("/sparkline") {
-	  contentType = "text/html"
-	  layoutTemplate("sparkline.scaml")
+  get("/metrics/sensors") {
+	  	contentType = formats("json")
+        val query = discemoneActor ? "SENSOR_LIST_REQUEST"
+        Await.result (query, 1 second)    
   }
   
-  put("/sensor1/params?value=:value") {
-	  val newValue: String = params("value") 
-	  discemoneActor ! ThresholdValue(newValue.toInt)
+  get("/memberCount") {
+	  	contentType = formats("json")
+        val query = discemoneActor ? "MEMBER_COUNT"
+        Await.result (query, 1 second)    
+  }
+  
+  get("/members") {
+	  	contentType = formats("json")
+        val query = discemoneActor ? "MEMBER_LIST_REQUEST"
+        Await.result (query, 1 second)    
+  }
+  
+  get("/members/:id") {
+	  	contentType = formats("json")
+        val query = discemoneActor ? Member(params("id"))
+        Await.result (query, 1 second)    
+  }
+  
+  put("/parameters/sensor/:id") {
+    val threshold = params.getOrElse("threshold", "-1").toInt
+    val filterLength = params.getOrElse("filterLength", "-1").toInt
+    discemoneActor ! Sensor(params("id"), threshold, filterLength)
+    status = 204
+  }
+  
+  put("/shutdown") {
+    logger.info ("shutdown request received")
+  }
+  
+  put("/startup") {
+    logger.info ("startup request received")
+    
+  }
+  
+  put("/restart") {
+    logger.info ("restart request received")    
+  }
+  
+  put("/pattern/:id/") {
+    params("intensity")
+    params("red")
+    params("green")
+    params("blue")
+    params("speed")
   }
   
 }

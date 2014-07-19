@@ -18,6 +18,7 @@ class ScalatraBootstrap extends LifeCycle {
   
   override def init(context: ServletContext) {
     logger.info("Starting Discemone ScalatraBootstrap with actor setup")
+    context.setInitParameter(CorsSupport.AllowedMethodsKey, "GET, PUT, POST")
     context.mount(new DiscemoneServerServlet(system, a), "/*")
   }
 

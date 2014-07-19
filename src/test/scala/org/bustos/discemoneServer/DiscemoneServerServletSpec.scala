@@ -88,7 +88,7 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
       }
     }
   }
-
+/*
   "PUT /parameters/sensor/sensor_1?threshold=100&filterLength=100 on DiscemoneServerServlet" should {
     "return status 200" in {
       get("parameters/sensor/sensor_1?threshold=100&filterLength=100") {
@@ -128,5 +128,5 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
       }
     }
   }
-
+*/
 }

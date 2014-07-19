@@ -127,13 +127,13 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   get("/members/:id") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? Member(params("id"), 0, 0, 1.0f, 1.0f, 1.0f, 1.0f)
+        val query = discemoneActor ? Member(params("id"), 0, 0, 0.0f, 0.0f, 0.0f, 0.0f)
         Await.result (query, 1 second)    
   }
   
   put("/parameters/sensor/:id") {
-    val threshold = params.getOrElse("threshold", "-1").toInt
-    val filterLength = params.getOrElse("filterLength", "-1").toInt
+    val threshold: Int = params.getOrElse("threshold", "-1").toInt
+    val filterLength: Int = params.getOrElse("filterLength", "-1").toInt
     discemoneActor ! Sensor(params("id"), threshold, filterLength)
     status = 204
   }

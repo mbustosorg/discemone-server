@@ -127,7 +127,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   get("/members/:id") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? Member(params("id"))
+        val query = discemoneActor ? Member(params("id"), 0, 0, 1.0f, 1.0f, 1.0f, 1.0f)
         Await.result (query, 1 second)    
   }
   

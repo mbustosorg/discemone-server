@@ -30,7 +30,6 @@ object DiscemoneMock {
 		  			lon: Float,         // Longitude in decimal degrees
 		  			alt: Float,         // Altitude in feet
 		  			battery: Float)      // Battery voltage
-
   case class MemberList(collection: List[Member])
   case class PatternCommand(name: String, intensity: Int, red: Int, green: Int, blue: Int, speed: Int)
 }

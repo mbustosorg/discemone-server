@@ -11,10 +11,10 @@ object DiscemoneServerBuild extends Build {
   val Organization = "org.bustos"
   val Name = "DiscemoneServer"
   val Version = "1.0"
-  val ScalaVersion = "2.10.3"
+  val ScalaVersion = "2.10.2"
   val ScalatraVersion = "2.2.2"
 
-  //lazy val discemone = RootProject(file("../../scala/discemone"))
+  lazy val discemone = RootProject(file("../../scala/discemone"))
   lazy val rxtx_akka_io = RootProject(uri("git://github.com/msiegenthaler/rxtx-akka-io.git"))
 
   lazy val discemoneServerRoot = Project (
@@ -40,6 +40,7 @@ object DiscemoneServerBuild extends Build {
 	"ch.inventsoft.akka" %% "rxtx-akka-io" % "1.0.2",
         "org.rxtx" % "rxtx" % "2.1.7",
 	"com.typesafe.akka" %% "akka-actor" % "2.2.3",
+	"net.databinder.dispatch" %% "dispatch-core" % "0.11.1",
 	"org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container;compile",
         "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;compile;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
       ),
@@ -77,7 +78,6 @@ object DiscemoneServerBuild extends Build {
           	  to
       	      }
   	  }
-    ) settings (net.virtualvoid.sbt.graph.Plugin.graphSettings: _*) dependsOn (rxtx_akka_io)
-    //dependsOn (discemone)
+    ) settings (net.virtualvoid.sbt.graph.Plugin.graphSettings: _*) dependsOn (rxtx_akka_io) dependsOn (discemone)
 
 }

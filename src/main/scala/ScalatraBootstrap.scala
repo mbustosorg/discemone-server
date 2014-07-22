@@ -2,6 +2,7 @@ import org.bustos.discemoneServer._
 import org.scalatra._
 import javax.servlet.ServletContext
 import _root_.akka.actor.{ActorSystem, Props}
+import _root_.akka.routing.SmallestMailboxRouter
 import org.bustos.discemone._
 import org.slf4j.LoggerFactory
 
@@ -12,14 +13,14 @@ import org.slf4j.LoggerFactory
 class ScalatraBootstrap extends LifeCycle {
 
   val system = ActorSystem("discemone")
-  //val a = system.actorOf(Props[Discemone], "Discemone")    
-  val a = system.actorOf(Props[DiscemoneMock], "Discemone")    
+  val discemoneActor = system.actorOf(Props[Discemone], "DiscemoneActor")    
+  //val discemoneActor = system.actorOf(Props[DiscemoneMock], "DiscemoneActor")    
   val logger = LoggerFactory.getLogger(getClass)
   
   override def init(context: ServletContext) {
     logger.info("Starting Discemone ScalatraBootstrap with actor setup")
     context.setInitParameter(CorsSupport.AllowedMethodsKey, "GET, PUT, POST")
-    context.mount(new DiscemoneServerServlet(system, a), "/*")
+    context.mount(new DiscemoneServerServlet(system, discemoneActor), "/*")
   }
 
   override def destroy(context:ServletContext) {

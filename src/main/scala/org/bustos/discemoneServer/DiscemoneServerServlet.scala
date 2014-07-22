@@ -15,7 +15,8 @@ import _root_.akka.pattern.ask
 import _root_.akka.actor.Status.{ Success, Failure }
 
 import scala.concurrent.{ExecutionContext, Future, Promise, Await}
-
+import scala.concurrent.duration._
+  
 /** Servlet main class for serving Discemone data
  * 
  *  @constructor create a new servlet
@@ -28,19 +29,17 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
 																					with CorsSupport {
   protected implicit def executor: ExecutionContext = system.dispatcher
   protected implicit val jsonFormats: Formats = DefaultFormats
-
-  import scala.concurrent.duration._
   
   val logger = LoggerFactory.getLogger(getClass)
   
-  //import org.bustos.discemone.Discemone._
-  import org.bustos.discemoneServer.DiscemoneMock._
+  import org.bustos.discemone.Discemone._
+  //import org.bustos.discemoneServer.DiscemoneMock._
   
-  implicit val defaultTimeout = Timeout(100)
+  implicit val defaultTimeout = Timeout(1000)
   
   options("/*"){
-    //response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"))
-	response.setHeader("Allow", "PUT, POST, GET")
+    response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"))
+	//response.setHeader("Allow", "PUT, POST, GET")
   }
   
   options("/shutdown") {
@@ -85,19 +84,25 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   get("/metrics/cpu") {    
 	  	contentType = formats("json")
-        val query = discemoneActor ? "CPU_TIME_SERIES_REQUEST"
+        val query = discemoneActor ? TimeSeriesRequestCPU
         Await.result (query, 1 second)
   }
   
   get("/metrics/battery") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? "BAT_TIME_SERIES_REQUEST"
+        val query = discemoneActor ? TimeSeriesRequestBattery
         Await.result (query, 1 second)    
   }
   
   get("/metrics/memory") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? "MEM_TIME_SERIES_REQUEST"
+        val query = discemoneActor ? TimeSeriesRequestMemory
+        Await.result (query, 1 second)    
+  }
+  
+  get("/metrics/sensors") {
+	  	contentType = formats("json")
+        val query = discemoneActor ? ListRequestSensor
         Await.result (query, 1 second)    
   }
   
@@ -107,34 +112,28 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
         Await.result (query, 1 second)    
   }
   
-  get("/metrics/sensors") {
-	  	contentType = formats("json")
-        val query = discemoneActor ? "SENSOR_LIST_REQUEST"
-        Await.result (query, 1 second)    
-  }
-  
   get("/memberCount") {
 	  	contentType = formats("json")
         val query = discemoneActor ? "MEMBER_COUNT"
-        Await.result (query, 1 second)    
+        Await.result (query, 1 second).toString
   }
   
   get("/members") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? "MEMBER_LIST_REQUEST"
-        Await.result (query, 1 second)    
+        val query = discemoneActor ? ListRequestMember
+        Await.result (query, 1 second)
   }
   
   get("/members/:id") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? Member(params("id"), 0, 0, 0.0f, 0.0f, 0.0f, 0.0f)
+        val query = discemoneActor ? MemberDetail(params("id"), 0, 0, 0.0f, 0.0f, 0.0f, 0.0f)
         Await.result (query, 1 second)    
   }
   
   put("/parameters/sensor/:id") {
     val threshold: Int = params.getOrElse("threshold", "-1").toInt
     val filterLength: Int = params.getOrElse("filterLength", "-1").toInt
-    discemoneActor ! Sensor(params("id"), threshold, filterLength)
+    discemoneActor ! SensorDetail(params("id"), threshold, filterLength)
     status = 204
   }
   

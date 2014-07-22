@@ -25,7 +25,7 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
     }
   }
 
-  "GET /metrics/cpu on DiscemoneServerServlet" should {
+/*  "GET /metrics/cpu on DiscemoneServerServlet" should {
     "return status 200" in {
       get("/metrics/cpu") {
         status must_== 200
@@ -56,7 +56,7 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
       }
     }
   }
-
+*/
   "GET /metrics/sensors on DiscemoneServerServlet" should {
     "return status 200" in {
       get("/metrics/sensors") {
@@ -81,13 +81,14 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
     }
   }
 
-  "GET /members/member_1 on DiscemoneServerServlet" should {
+/*  "GET /members/member_1 on DiscemoneServerServlet" should {
     "return status 200" in {
       get("/members/member_1") {
         status must_== 200
       }
     }
   }
+*/
 /*
   "PUT /parameters/sensor/sensor_1?threshold=100&filterLength=100 on DiscemoneServerServlet" should {
     "return status 200" in {

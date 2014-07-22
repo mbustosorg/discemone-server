@@ -33,6 +33,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   val logger = LoggerFactory.getLogger(getClass)
   
   import org.bustos.discemone.Discemone._
+ 
   //import org.bustos.discemoneServer.DiscemoneMock._
   
   implicit val defaultTimeout = Timeout(1000)
@@ -84,50 +85,50 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   get("/metrics/cpu") {    
 	  	contentType = formats("json")
-        val query = discemoneActor ? TimeSeriesRequestCPU
-        Await.result (query, 1 second)
+        val future = discemoneActor ? TimeSeriesRequestCPU
+        Await.result (future, 1 second)
   }
   
   get("/metrics/battery") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? TimeSeriesRequestBattery
-        Await.result (query, 1 second)    
+        val future = discemoneActor ? TimeSeriesRequestBattery
+        Await.result (future, 1 second)    
   }
   
   get("/metrics/memory") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? TimeSeriesRequestMemory
-        Await.result (query, 1 second)    
+        val future = discemoneActor ? TimeSeriesRequestMemory
+        Await.result (future, 1 second)    
   }
   
   get("/metrics/sensors") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? ListRequestSensor
-        Await.result (query, 1 second)    
+        val future = discemoneActor ? ListRequestSensor
+        Await.result (future, 1 second)    
   }
   
   get("/metrics/sensors/:id/activityLevel") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? SensorActivityLevel(params("id"))
-        Await.result (query, 1 second)    
+        val future = discemoneActor ? SensorActivityLevel(params("id"))
+        Await.result (future, 1 second)    
   }
   
   get("/memberCount") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? "MEMBER_COUNT"
-        Await.result (query, 1 second).toString
+        val future = discemoneActor ? "MEMBER_COUNT"
+        Await.result (future, 1 second).toString
   }
   
   get("/members") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? ListRequestMember
-        Await.result (query, 1 second)
+        val future = discemoneActor ? ListRequestMember
+        Await.result (future, 1 second)
   }
   
   get("/members/:id") {
 	  	contentType = formats("json")
-        val query = discemoneActor ? MemberDetail(params("id"), 0, 0, 0.0f, 0.0f, 0.0f, 0.0f)
-        Await.result (query, 1 second)    
+        val future = discemoneActor ? MemberDetail(params("id"), 0, 0, 0.0f, 0.0f, 0.0f, 0.0f)
+        Await.result (future, 1 second)    
   }
   
   put("/parameters/sensor/:id") {

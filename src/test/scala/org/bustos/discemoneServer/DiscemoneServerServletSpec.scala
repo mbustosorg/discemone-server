@@ -5,6 +5,7 @@ import org.scalatra.test.specs2._
 // -- New for discemone
 import _root_.akka.actor.{ActorSystem, Props}
 import org.bustos.discemone._
+import org.bustos.discemone.Discemone._
 // --
 
 // For more on Specs2, see http://etorreborre.github.com/specs2/guide/org.specs2.guide.QuickStart.html
@@ -56,7 +57,7 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
       }
     }
   }
-*/
+
   "GET /metrics/sensors on DiscemoneServerServlet" should {
     "return status 200" in {
       get("/metrics/sensors") {
@@ -64,7 +65,7 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
       }
     }
   }
-
+*/
   "GET /memberCount on DiscemoneServerServlet" should {
     "return status 200" in {
       get("/memberCount") {
@@ -72,7 +73,7 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
       }
     }
   }
-
+/*
   "GET /members on DiscemoneServerServlet" should {
     "return status 200" in {
       get("/members") {
@@ -81,7 +82,7 @@ class DiscemoneServerServletSpec extends MutableScalatraSpec {
     }
   }
 
-/*  "GET /members/member_1 on DiscemoneServerServlet" should {
+  "GET /members/member_1 on DiscemoneServerServlet" should {
     "return status 200" in {
       get("/members/member_1") {
         status must_== 200

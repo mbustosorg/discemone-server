@@ -3,7 +3,7 @@ import org.scalatra._
 import javax.servlet.ServletContext
 import _root_.akka.actor.{ActorSystem, Props}
 import _root_.akka.routing.SmallestMailboxRouter
-import org.bustos.discemone._
+//import org.bustos.discemone._
 import org.slf4j.LoggerFactory
 
 /** Bootstrap class for scalatra servlet

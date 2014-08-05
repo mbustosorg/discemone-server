@@ -32,9 +32,8 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   val logger = LoggerFactory.getLogger(getClass)
   
-  import org.bustos.discemone.Discemone._
- 
-  //import org.bustos.discemoneServer.DiscemoneMock._
+  //import org.bustos.discemone.Discemone._
+  import org.bustos.discemoneServer.DiscemoneMock._
   
   implicit val defaultTimeout = Timeout(1000)
   
@@ -132,6 +131,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   put("/parameters/sensor/:id") {
+    // http://192.168.1.101:8080/parameters/sensor/sensor_1?threshold=100&filterLength=100
     val threshold: Int = params.getOrElse("threshold", "-1").toInt
     val filterLength: Int = params.getOrElse("filterLength", "-1").toInt
     discemoneActor ! SensorDetail(params("id"), threshold, filterLength)
@@ -157,6 +157,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     params("green")
     params("blue")
     params("speed")
+    status = 204
   }
   
 }

@@ -37,7 +37,7 @@ object DiscemoneServerBuild extends Build {
 	"org.scalatra" %% "scalatra-json" % "2.2.2", 
   	"org.json4s"   %% "json4s-native" % "3.2.6",
 	//"ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
-	"ch.inventsoft.akka" %% "rxtx-akka-io" % "1.0.2",
+	//"ch.inventsoft.akka" %% "rxtx-akka-io" % "1.0.2",
         //"org.rxtx" % "rxtx" % "2.1.7",
 	"com.typesafe.akka" %% "akka-actor" % "2.2.3",
 	"net.databinder.dispatch" %% "dispatch-core" % "0.11.1",

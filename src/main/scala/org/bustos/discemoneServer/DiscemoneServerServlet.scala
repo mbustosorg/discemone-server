@@ -33,17 +33,13 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   val logger = LoggerFactory.getLogger(getClass)
   
   //import org.bustos.discemone.Discemone._
+  // *** Uncomment for Heroku deployment 
   import org.bustos.discemoneServer.DiscemoneMock._
   
   implicit val defaultTimeout = Timeout(1000)
   
   options("/*"){
     response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"))
-	//response.setHeader("Allow", "PUT, POST, GET")
-  }
-  
-  options("/shutdown") {
-    response.setHeader("Allow", "PUT")
   }
   
   get("/") {
@@ -126,7 +122,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   get("/members/:id") {
 	  	contentType = formats("json")
-        val future = discemoneActor ? MemberDetail(params("id"), 0, 0, 0.0f, 0.0f, 0.0f, 0.0f)
+        val future = discemoneActor ? MemberDetail(params("id"), "", 0, 0.0f, 0.0f, 0.0f, 0.0f)
         Await.result (future, 1 second)    
   }
   
@@ -151,13 +147,12 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     logger.info ("restart request received")    
   }
   
-  put("/pattern/:id/") {
-    params("intensity")
-    params("red")
-    params("green")
-    params("blue")
-    params("speed")
-    status = 204
+  put("/pattern/:name") {
+    logger.info ("pattern command received:" + params("name") + ":" + params("intensity") + ":" + params("red") + ":" + params("green") + ":" + params("blue") + ":" + params("speed"))    
+  }
+  
+  put("/time/:seconds") {
+    logger.info ("time command received")
   }
   
 }

@@ -29,7 +29,7 @@ object DiscemoneMock {
   case class SensorDetail(name: String, threshold: Int, filterLength: Int)
   case class SensorList(collection: List[SensorDetail])
   case class MemberDetail(name: String, 
-		  				  xbee: Int,      // Lower 32 bit XBee address
+		  				  xbee: String,      // Lower 32 bit XBee address
 		  				  pattern: Int,   // Pattern id
 		  				  lat: Float,         // Latitude in decimal degrees
 		  				  lon: Float,         // Longitude in decimal degrees
@@ -47,11 +47,11 @@ class DiscemoneMock extends Actor with ActorLogging {
   
   implicit val defaultTimeout = Timeout(2000)  
 
-  val mockMembers: Map[String, MemberDetail] = Map(("member_1" -> MemberDetail("member_1", 1, 1, 40.0f, -119.0f, 1.0f, 6.4f)), 
-		  										   ("member_2" -> MemberDetail("member_2", 1, 1, 40.0f, -120.0f, 1.0f, 7.4f)), 
-		  										   ("member_3" -> MemberDetail("member_3", 1, 1, 40.0f, -120.0f, 1.0f, 7.4f)), 
-		  										   ("member_4" -> MemberDetail("member_4", 1, 1, 40.0f, -120.0f, 1.0f, 7.4f)), 
-		  										   ("member_5" -> MemberDetail("member_5", 1, 1, 39.0f, -120.0f, 1.0f, 7.0f)))
+  val mockMembers: Map[String, MemberDetail] = Map(("member_1" -> MemberDetail("member_1", "", 1, 40.0f, -119.0f, 1.0f, 6.4f)), 
+		  										   ("member_2" -> MemberDetail("member_2", "", 1, 40.0f, -120.0f, 1.0f, 7.4f)), 
+		  										   ("member_3" -> MemberDetail("member_3", "", 1, 40.0f, -120.0f, 1.0f, 7.4f)), 
+		  										   ("member_4" -> MemberDetail("member_4", "", 1, 40.0f, -120.0f, 1.0f, 7.4f)), 
+		  										   ("member_5" -> MemberDetail("member_5", "", 1, 39.0f, -120.0f, 1.0f, 7.0f)))
   var mockSensors: Map[String, SensorDetail] = Map(("sensor_1" -> SensorDetail("sensor_1", 100, 100)), 
 		  										   ("sensor_2" -> SensorDetail("sensor_2", 150, 150)), 
 		  										   ("sensor_3" -> SensorDetail("sensor_3", 200, 200)))
@@ -86,9 +86,9 @@ class DiscemoneMock extends Actor with ActorLogging {
       sender ! MemberList(mockMembers.values.toList)
       logger.info ("MemberList request delivered")      
     }
-    case MemberDetail(name, 0, 0, 0, 0, 0, 0) => {
+    case MemberDetail(name, "", 0, 0, 0, 0, 0) => {
       if (mockMembers.contains(name)) sender ! mockMembers(name)
-      else sender ! MemberDetail("unknown", 1, 1, 40.0f, -119.0f, 1.0f, 6.4f)
+      else sender ! MemberDetail("unknown", "", 1, 40.0f, -119.0f, 1.0f, 6.4f)
       logger.info ("Member request delivered")
     }
     // Put commands

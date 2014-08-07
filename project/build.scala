@@ -14,6 +14,7 @@ object DiscemoneServerBuild extends Build {
   val ScalaVersion = "2.10.2"
   val ScalatraVersion = "2.2.2"
 
+  // *** Comment next 2 lines for Heroku Deployment ***
   //lazy val discemone = RootProject(file("../../scala/discemone"))
   //lazy val rxtx_akka_io = RootProject(uri("git://github.com/msiegenthaler/rxtx-akka-io.git"))
 
@@ -37,8 +38,9 @@ object DiscemoneServerBuild extends Build {
 	"org.scalatra" %% "scalatra-json" % "2.2.2", 
   	"org.json4s"   %% "json4s-native" % "3.2.6",
 	//"ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
-	//"ch.inventsoft.akka" %% "rxtx-akka-io" % "1.0.2",
-        //"org.rxtx" % "rxtx" % "2.1.7",
+	// *** Comment out next 2 lines for Heroku Deployment ***
+	"ch.inventsoft.akka" %% "rxtx-akka-io" % "1.0.2",
+        "org.rxtx" % "rxtx" % "2.1.7",
 	"com.typesafe.akka" %% "akka-actor" % "2.2.3",
 	"net.databinder.dispatch" %% "dispatch-core" % "0.11.1",
 	"org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container;compile",
@@ -78,6 +80,8 @@ object DiscemoneServerBuild extends Build {
           	  to
       	      }
   	  }
-    ) settings (net.virtualvoid.sbt.graph.Plugin.graphSettings: _*) //dependsOn (rxtx_akka_io) dependsOn (discemone)
+    ) settings (net.virtualvoid.sbt.graph.Plugin.graphSettings: _*) 
+//dependsOn (rxtx_akka_io) dependsOn (discemone)
+      // *** Comment out above line for Heroku Deployment ***
 
 }

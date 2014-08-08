@@ -37,6 +37,7 @@ object DiscemoneMock {
 		  				  battery: Float)      // Battery voltage
   case class MemberList(collection: List[MemberDetail])
   case class PatternCommand(name: String, intensity: Int, red: Int, green: Int, blue: Int, speed: Int)
+  case class PatternNames
 }
 
 class DiscemoneMock extends Actor with ActorLogging {
@@ -90,6 +91,10 @@ class DiscemoneMock extends Actor with ActorLogging {
       if (mockMembers.contains(name)) sender ! mockMembers(name)
       else sender ! MemberDetail("unknown", "", 1, 40.0f, -119.0f, 1.0f, 6.4f)
       logger.info ("Member request delivered")
+    }
+    case PatternNames => {
+      sender ! ("1" -> "Pattern 1", "2" -> "Pattern 2", "3" -> "Pattern 3")
+      logger.info ("Pattern names request delivered")
     }
     // Put commands
     case SensorDetail(name, threshold, filterLength) => {

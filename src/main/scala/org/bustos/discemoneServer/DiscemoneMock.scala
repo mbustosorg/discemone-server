@@ -93,7 +93,7 @@ class DiscemoneMock extends Actor with ActorLogging {
       logger.info ("Member request delivered")
     }
     case PatternNames => {
-      sender ! ("1" -> "Pattern 1", "2" -> "Pattern 2", "3" -> "Pattern 3")
+      sender ! Map ("1" -> "Pattern 1", "2" -> "Pattern 2", "3" -> "Pattern 3")
       logger.info ("Pattern names request delivered")
     }
     // Put commands

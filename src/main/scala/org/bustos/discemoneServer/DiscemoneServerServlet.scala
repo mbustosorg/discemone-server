@@ -28,7 +28,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
 																					with NativeJsonSupport 
 																					with CorsSupport {
   protected implicit def executor: ExecutionContext = system.dispatcher
-  protected implicit val jsonFormats: Formats = DefaultFormats
+  protected implicit val jsonFormats: Formats = DefaultFormats.withBigDecimal
   
   val logger = LoggerFactory.getLogger(getClass)
   
@@ -38,8 +38,13 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   implicit val defaultTimeout = Timeout(1000)
   
-  options("/*"){
+  options("*"){
     response.setHeader("Access-Control-Allow-Headers", request.getHeader("Access-Control-Request-Headers"))
+  }
+  
+  // Before every action runs, set the content type to be in JSON format.
+  before() {
+    contentType = formats("json")
   }
   
   get("/") {
@@ -79,59 +84,55 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   get("/metrics/cpu") {    
-	  	contentType = formats("json")
         val future = discemoneActor ? TimeSeriesRequestCPU
         Await.result (future, 1 second)
   }
   
   get("/metrics/battery") {
-	  	contentType = formats("json")
         val future = discemoneActor ? TimeSeriesRequestBattery
         Await.result (future, 1 second)    
   }
   
   get("/metrics/memory") {
-	  	contentType = formats("json")
         val future = discemoneActor ? TimeSeriesRequestMemory
         Await.result (future, 1 second)    
   }
   
   get("/metrics/sensors") {
-	  	contentType = formats("json")
         val future = discemoneActor ? ListRequestSensor
         Await.result (future, 1 second)    
   }
   
   get("/metrics/sensors/:id/activityLevel") {
-	  	contentType = formats("json")
         val future = discemoneActor ? SensorActivityLevel(params("id"))
         Await.result (future, 1 second)    
   }
   
   get("/memberCount") {
-	  	contentType = formats("json")
         val future = discemoneActor ? "MEMBER_COUNT"
         Await.result (future, 1 second).toString
   }
   
   get("/members") {
-	  	contentType = formats("json")
         val future = discemoneActor ? ListRequestMember
         Await.result (future, 1 second)
   }
   
   get("/members/:id") {
-	  	contentType = formats("json")
-        val future = discemoneActor ? MemberDetail(params("id"), "", 0, 0.0f, 0.0f, 0.0f, 0.0f)
-        Await.result (future, 1 second)    
+	  val future = discemoneActor ? MemberDetail(params("id"), "", 0, 0.0f, 0.0f, 0.0f, 0.0f)
+	  Await.result (future, 1 second)    
   }
   
-  put("/parameters/sensor/:id") {
+  get("/pattern/names") {
+	  val future = discemoneActor ? PatternNames
+	  Await.result (future, 1 second)
+  }
+  
+  put("/sensor/:name") {
     // http://192.168.1.101:8080/parameters/sensor/sensor_1?threshold=100&filterLength=100
     val threshold: Int = params.getOrElse("threshold", "-1").toInt
     val filterLength: Int = params.getOrElse("filterLength", "-1").toInt
-    discemoneActor ! SensorDetail(params("id"), threshold, filterLength)
-    status = 204
+    discemoneActor ! SensorDetail(params("name"), threshold, filterLength)
   }
   
   put("/shutdown") {
@@ -139,8 +140,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   put("/startup") {
-    logger.info ("startup request received")
-    
+    logger.info ("startup request received")    
   }
   
   put("/restart") {
@@ -148,11 +148,11 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   put("/pattern/:name") {
-    logger.info ("pattern command received:" + params("name") + ":" + params("intensity") + ":" + params("red") + ":" + params("green") + ":" + params("blue") + ":" + params("speed"))    
+    logger.info ("pattern command received:" + params("name") + ":" + params("intensity") + ":" + params("red") + ":" + params("green") + ":" + params("blue") + ":" + params("speed"))
   }
   
-  put("/time/:seconds") {
-    logger.info ("time command received")
+  put("/time") {
+    logger.info ("time command received: " + params("seconds"))
   }
   
 }

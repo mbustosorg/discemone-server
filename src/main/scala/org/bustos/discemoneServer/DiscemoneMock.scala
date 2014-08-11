@@ -34,7 +34,9 @@ object DiscemoneMock {
 		  				  lat: Float,         // Latitude in decimal degrees
 		  				  lon: Float,         // Longitude in decimal degrees
 		  				  alt: Float,         // Altitude in feet
-		  				  battery: Float)      // Battery voltage
+		  				  battery: Float,     // Battery voltage
+		  				  heartbeatAge: Int   // Seconds since last heartbeat
+		  				  )
   case class MemberList(collection: List[MemberDetail])
   case class PatternCommand(name: String, intensity: Int, red: Int, green: Int, blue: Int, speed: Int, modDelay: Int)
   case class PatternNames
@@ -50,11 +52,11 @@ class DiscemoneMock extends Actor with ActorLogging {
   
   implicit val defaultTimeout = Timeout(2000)  
 
-  val mockMembers: Map[String, MemberDetail] = Map(("member_1" -> MemberDetail("member_1", "", 1, 40.123321f, -119.123321f, 1.0f, 6.4f)), 
-		  										   ("member_2" -> MemberDetail("member_2", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f)), 
-		  										   ("member_3" -> MemberDetail("member_3", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f)), 
-		  										   ("member_4" -> MemberDetail("member_4", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f)), 
-		  										   ("member_5" -> MemberDetail("member_5", "", 1, 39.123321f, -120.123321f, 1.0f, 7.0f)))
+  val mockMembers: Map[String, MemberDetail] = Map(("member_1" -> MemberDetail("member_1", "", 1, 40.123321f, -119.123321f, 1.0f, 6.4f, 10)), 
+		  										   ("member_2" -> MemberDetail("member_2", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 12)), 
+		  										   ("member_3" -> MemberDetail("member_3", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 13)), 
+		  										   ("member_4" -> MemberDetail("member_4", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 14)), 
+		  										   ("member_5" -> MemberDetail("member_5", "", 1, 39.123321f, -120.123321f, 1.0f, 7.0f, 0)))
   var mockSensors: Map[String, SensorDetail] = Map(("sensor_1" -> SensorDetail("sensor_1", 100, 100)), 
 		  										   ("sensor_2" -> SensorDetail("sensor_2", 150, 150)), 
 		  										   ("sensor_3" -> SensorDetail("sensor_3", 200, 200)))
@@ -89,9 +91,9 @@ class DiscemoneMock extends Actor with ActorLogging {
       sender ! MemberList(mockMembers.values.toList)
       logger.info ("MemberList request delivered")      
     }
-    case MemberDetail(name, "", 0, 0, 0, 0, 0) => {
+    case MemberDetail(name, "", 0, 0, 0, 0, 0, 0) => {
       if (mockMembers.contains(name)) sender ! mockMembers(name)
-      else sender ! MemberDetail("unknown", "", 1, 40.0f, -119.0f, 1.0f, 6.4f)
+      else sender ! MemberDetail("unknown", "", 1, 40.0f, -119.0f, 1.0f, 6.4f, 0)
       logger.info ("Member request delivered")
     }
     case PatternNames => {

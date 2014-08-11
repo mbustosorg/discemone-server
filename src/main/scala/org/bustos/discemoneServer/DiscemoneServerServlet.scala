@@ -119,7 +119,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   get("/members/:id") {
-	  val future = discemoneActor ? MemberDetail(params("id"), "", 0, 0.0f, 0.0f, 0.0f, 0.0f)
+	  val future = discemoneActor ? MemberDetail(params("id"), "", 0, 0.0f, 0.0f, 0.0f, 0.0f, 0)
 	  Await.result (future, 1 second)    
   }
   
@@ -142,6 +142,7 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   put("/shutdown") {
     logger.info ("shutdown request received")
+    System.exit(1)
   }
   
   put("/startup") {

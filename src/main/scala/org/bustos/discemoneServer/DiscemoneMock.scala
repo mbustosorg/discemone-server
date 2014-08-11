@@ -36,8 +36,10 @@ object DiscemoneMock {
 		  				  alt: Float,         // Altitude in feet
 		  				  battery: Float)      // Battery voltage
   case class MemberList(collection: List[MemberDetail])
-  case class PatternCommand(name: String, intensity: Int, red: Int, green: Int, blue: Int, speed: Int)
+  case class PatternCommand(name: String, intensity: Int, red: Int, green: Int, blue: Int, speed: Int, modDelay: Int)
   case class PatternNames
+  case class CurrentPattern
+  case class SetTime(seconds: Int)
 }
 
 class DiscemoneMock extends Actor with ActorLogging {
@@ -101,9 +103,12 @@ class DiscemoneMock extends Actor with ActorLogging {
       mockSensors += (name -> SensorDetail(name, threshold, filterLength))
       logger.info ("Sensor command processed")      
     }
-    case PatternCommand(name, intensity, red, green, blue, speed) => {
+    case PatternCommand => {
       sender ! "OK"
       logger.info ("Pattern command processed")      
+    }
+    case SetTime => {
+      logger.info ("Set time command processed")            
     }
     case _ => {
       logger.info ("Received Unknown message")

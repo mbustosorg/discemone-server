@@ -128,6 +128,11 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
 	  Await.result (future, 1 second)
   }
   
+  get("/pattern/current") {
+	  val future = discemoneActor ? CurrentPattern
+	  Await.result (future, 1 second)    
+  }
+  
   put("/sensor/:name") {
     // http://192.168.1.101:8080/parameters/sensor/sensor_1?threshold=100&filterLength=100
     val threshold: Int = params.getOrElse("threshold", "-1").toInt
@@ -148,11 +153,13 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   }
   
   put("/pattern/:name") {
-    logger.info ("pattern command received:" + params("name") + ":" + params("intensity") + ":" + params("red") + ":" + params("green") + ":" + params("blue") + ":" + params("speed"))
+    logger.info ("pattern command received:" + params("name") + ":" + params("intensity") + ":" + params("red") + ":" + params("green") + ":" + params("blue") + ":" + params("speed") + ":" + params("modDelay"))
+    discemoneActor ! PatternCommand(params("name"), params("intensity").toInt, params("red").toInt, params("green").toInt, params("blue").toInt, params("speed").toInt, params("modDelay").toInt)
   }
   
   put("/time") {
     logger.info ("time command received: " + params("seconds"))
+    discemoneActor ! SetTime(params("seconds").toInt)
   }
   
 }

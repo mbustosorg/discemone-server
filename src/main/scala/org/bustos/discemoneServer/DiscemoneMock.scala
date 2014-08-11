@@ -98,6 +98,10 @@ class DiscemoneMock extends Actor with ActorLogging {
       sender ! Map ("1" -> "Pattern 1", "2" -> "Pattern 2", "3" -> "Pattern 3")
       logger.info ("Pattern names request delivered")
     }
+    case CurrentPattern => {
+      sender ! PatternCommand ("34", 120, 0, 255, 0, 255, 0)
+      logger.info ("Current pattern request delivered")
+    }
     // Put commands
     case SensorDetail(name, threshold, filterLength) => {
       mockSensors += (name -> SensorDetail(name, threshold, filterLength))

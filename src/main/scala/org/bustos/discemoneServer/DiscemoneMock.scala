@@ -52,11 +52,11 @@ class DiscemoneMock extends Actor with ActorLogging {
   
   implicit val defaultTimeout = Timeout(2000)  
 
-  val mockMembers: Map[String, MemberDetail] = Map(("member_1" -> MemberDetail("member_1", "", 1, 40.123321f, -119.123321f, 1.0f, 6.4f, 10)), 
-		  										   ("member_2" -> MemberDetail("member_2", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 12)), 
-		  										   ("member_3" -> MemberDetail("member_3", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 13)), 
-		  										   ("member_4" -> MemberDetail("member_4", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 14)), 
-		  										   ("member_5" -> MemberDetail("member_5", "", 1, 39.123321f, -120.123321f, 1.0f, 7.0f, 0)))
+  val mockMembers: Map[String, MemberDetail] = Map(("1" -> MemberDetail("1", "", 1, 40.123321f, -119.123321f, 1.0f, 6.4f, 10)), 
+		  										   ("2" -> MemberDetail("2", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 12)), 
+		  										   ("3" -> MemberDetail("3", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 13)), 
+		  										   ("4" -> MemberDetail("4", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 14)), 
+		  										   ("5" -> MemberDetail("5", "", 1, 39.123321f, -120.123321f, 1.0f, 7.0f, 0)))
   var mockSensors: Map[String, SensorDetail] = Map(("sensor_1" -> SensorDetail("sensor_1", 100, 100)), 
 		  										   ("sensor_2" -> SensorDetail("sensor_2", 150, 150)), 
 		  										   ("sensor_3" -> SensorDetail("sensor_3", 200, 200)))

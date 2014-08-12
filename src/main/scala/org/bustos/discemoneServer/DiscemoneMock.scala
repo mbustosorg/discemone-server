@@ -26,7 +26,7 @@ object DiscemoneMock {
   case class MetricHistory(history: List[Double])
   case class MetricValue(value: Double)
   case class SensorActivityLevel(id: String)
-  case class SensorDetail(name: String, threshold: Int, filterLength: Int)
+  case class SensorDetail(name: String, threshold: Int, filterLength: Int, throttle: Int)
   case class SensorList(collection: List[SensorDetail])
   case class MemberDetail(name: String, 
 		  				  xbee: String,      // Lower 32 bit XBee address
@@ -57,9 +57,9 @@ class DiscemoneMock extends Actor with ActorLogging {
 		  										   ("3" -> MemberDetail("3", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 13)), 
 		  										   ("4" -> MemberDetail("4", "", 1, 40.123321f, -120.123321f, 1.0f, 7.4f, 14)), 
 		  										   ("5" -> MemberDetail("5", "", 1, 39.123321f, -120.123321f, 1.0f, 7.0f, 0)))
-  var mockSensors: Map[String, SensorDetail] = Map(("sensor_1" -> SensorDetail("sensor_1", 100, 100)), 
-		  										   ("sensor_2" -> SensorDetail("sensor_2", 150, 150)), 
-		  										   ("sensor_3" -> SensorDetail("sensor_3", 200, 200)))
+  var mockSensors: Map[String, SensorDetail] = Map(("sensor_1" -> SensorDetail("sensor_1", 100, 100, 50)), 
+		  										   ("sensor_2" -> SensorDetail("sensor_2", 150, 150, 50)), 
+		  										   ("sensor_3" -> SensorDetail("sensor_3", 200, 200, 50)))
   val logger =  LoggerFactory.getLogger(getClass)
   
   def receive = {
@@ -105,8 +105,8 @@ class DiscemoneMock extends Actor with ActorLogging {
       logger.info ("Current pattern request delivered")
     }
     // Put commands
-    case SensorDetail(name, threshold, filterLength) => {
-      mockSensors += (name -> SensorDetail(name, threshold, filterLength))
+    case SensorDetail(name, threshold, filterLength, throttle) => {
+      mockSensors += (name -> SensorDetail(name, threshold, filterLength, throttle))
       logger.info ("Sensor command processed")      
     }
     case PatternCommand => {

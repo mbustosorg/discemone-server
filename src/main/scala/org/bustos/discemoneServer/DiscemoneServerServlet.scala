@@ -140,7 +140,8 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     // http://192.168.1.101:8080/parameters/sensor/sensor_1?threshold=100&filterLength=100
     val threshold: Int = params.getOrElse("threshold", "-1").toInt
     val filterLength: Int = params.getOrElse("filterLength", "-1").toInt
-    discemoneActor ! SensorDetail(params("name"), threshold, filterLength)
+    val throttle: Int = params.getOrElse("throttle", "-1").toInt
+    discemoneActor ! SensorDetail(params("name"), threshold, filterLength, throttle)
   }
   
   put("/reboot") {

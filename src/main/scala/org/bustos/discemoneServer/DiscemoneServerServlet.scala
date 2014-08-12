@@ -16,6 +16,9 @@ import _root_.akka.actor.Status.{ Success, Failure }
 
 import scala.concurrent.{ExecutionContext, Future, Promise, Await}
 import scala.concurrent.duration._
+import scala.sys.process.Process
+
+import java.net.InetAddress
   
 /** Servlet main class for serving Discemone data
  * 
@@ -140,17 +143,28 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
     discemoneActor ! SensorDetail(params("name"), threshold, filterLength)
   }
   
-  put("/shutdown") {
-    logger.info ("shutdown request received")
-    System.exit(1)
+  put("/reboot") {
+    logger.info ("reboot request received")
+	val hostname = InetAddress.getLocalHost().getHostName()
+	if (hostname.toLowerCase().contains ("raspberrypi")) {
+		Process("reboot", Seq())!
+	}
   }
   
-  put("/startup") {
-    logger.info ("startup request received")    
+  put("/shutdown") {
+    logger.info ("shutdown request received")    
+	val hostname = InetAddress.getLocalHost().getHostName()
+	if (hostname.toLowerCase().contains ("raspberrypi")) {
+		Process("shutdown", Seq("-h", "now"))!
+	}
   }
   
   put("/restart") {
     logger.info ("restart request received")    
+	val hostname = InetAddress.getLocalHost().getHostName()
+	if (hostname.toLowerCase().contains ("raspberrypi")) {
+		System.exit(1)
+	}
   }
   
   put("/pattern/:name") {

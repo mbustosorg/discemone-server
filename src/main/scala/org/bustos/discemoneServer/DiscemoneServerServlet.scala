@@ -35,9 +35,9 @@ class DiscemoneServerServlet(system: ActorSystem, discemoneActor: ActorRef) exte
   
   val logger = LoggerFactory.getLogger(getClass)
   
-  //import org.bustos.discemone.Discemone._
+  import org.bustos.discemone.Discemone._
   // *** Uncomment for Heroku deployment 
-  import org.bustos.discemoneServer.DiscemoneMock._
+  //import org.bustos.discemoneServer.DiscemoneMock._
   
   implicit val defaultTimeout = Timeout(1000)
   
